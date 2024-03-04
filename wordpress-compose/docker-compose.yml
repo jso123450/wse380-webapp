@@ -20,6 +20,8 @@ services:
         image: wordpress:6.4.3-fpm-alpine
         container_name: wordpress
         restart: unless-stopped
+        ports:
+            - "127.0.0.1:9000:9000"
         env_file: .env
         environment:
             - WORDPRESS_DB_HOST=db:3306
@@ -39,23 +41,23 @@ services:
         restart: unless-stopped
         ports:
             - "80:80"
-            # - "443:443"
+            - "443:443"
         volumes:
             - wordpress:/var/www/html
-            - ./nginx-http:/etc/nginx/conf.d
+            - ./nginx-https:/etc/nginx/conf.d
             - certbot-etc:/etc/letsencrypt
         networks:
             - app-network
 
-    certbot:
-        depends_on:
-            - webserver
-        image: certbot/certbot
-        container_name: certbot
-        volumes:
-            - certbot-etc:/etc/letsencrypt
-            - wordpress:/var/www/html
-        command: certonly --webroot --webroot-path=/var/www/html --email $EMAIL --agree-tos --no-eff-email --staging -d $DOMAIN -d www.$DOMAIN
+    # certbot:
+    #     depends_on:
+    #         - webserver
+    #     image: certbot/certbot
+    #     container_name: certbot
+    #     volumes:
+    #         - certbot-etc:/etc/letsencrypt
+    #         - wordpress:/var/www/html
+    #     command: certonly --webroot --webroot-path=/var/www/html --email $EMAIL --agree-tos --no-eff-email -d $DOMAIN -d www.$DOMAIN
 
 volumes:
     certbot-etc:

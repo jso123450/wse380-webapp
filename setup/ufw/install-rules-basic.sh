@@ -10,6 +10,7 @@ sudo ufw deny in 443/tcp
 
 ## ssh
 sudo ufw allow in 22/tcp
+sudo ufw allow in 23700/tcp
 
 sudo ufw enable
 sudo ufw status verbose

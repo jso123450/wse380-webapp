@@ -1,0 +1,42 @@
+services:
+    academicpages-site:
+        image: academicpages-site
+        build:
+            context: ./src
+        volumes:
+            - ./src:/usr/src/app
+        ports:
+            - "127.0.0.1:4000:4000"
+        user: 1000:1000
+        environment: [ JEKYLL_ENV=docker ]
+
+    webserver:
+        depends_on:
+            - academicpages-site
+        build:
+            context: ./mynginx
+        restart: unless-stopped
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - certbot-etc:/etc/letsencrypt
+            - nginx_logs:/var/log/nginx
+            - ./mynginx/nginx-https:/etc/nginx/conf.d
+    # certbot:
+    #     image: certbot/certbot
+    #     ports:
+    #         - "80:80"
+    #     volumes:
+    #         - certbot-etc:/etc/letsencrypt
+    #     command: certonly --standalone -d $DOMAIN --email $EMAIL --agree-tos --no-eff-email --keep-until-expiring
+
+volumes:
+    certbot-etc:
+    dbdata:
+    nginx_logs:
+
+
+networks:
+    app-network:
+        driver: bridge

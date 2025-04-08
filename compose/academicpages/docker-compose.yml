@@ -22,7 +22,7 @@ services:
         volumes:
             - certbot-etc:/etc/letsencrypt
             - nginx_logs:/var/log/nginx
-            - ./mynginx/nginx-https:/etc/nginx/conf.d
+            - ./mynginx/nginx-http:/etc/nginx/conf.d
     # certbot:
     #     image: certbot/certbot
     #     ports:

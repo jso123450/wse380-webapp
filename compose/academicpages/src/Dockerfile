@@ -8,10 +8,12 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Set the working directory inside the container
-WORKDIR /usr/src/app
+RUN adduser ubuntu
+USER ubuntu
+WORKDIR /home/ubuntu/
 
-# Copy Gemfile into the container (necessary for `bundle install`)
-COPY Gemfile ./
+# Copy the contents of the site
+COPY . .
 
 # Install bundler and dependencies
 RUN gem install bundler:2.3.26 && bundle install

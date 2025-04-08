@@ -5,15 +5,22 @@ if [ "$1" != "wordpress" ] && [ "$1" != "academicpages" ]; then
   exit 1
 fi
 
+DIR_BASE=~/wse380-webapp
+
 set -a
-. ./compose/$1/.env
+. $DIR_BASE/compose/$1/.env
 set +a
 
 # replace the placeholder <DOMAIN> string with the DOMAIN value from .env for http config
-sed -i 's/<DOMAIN>/'"$DOMAIN"'/g' compose/$1/mynginx/nginx-http/nginx.conf
+echo "Replacing placeholder domain for http config"
+sed -i 's/<DOMAIN>/'"$DOMAIN"'/g' $DIR_BASE/compose/$1/mynginx/nginx-http/nginx.conf
 
 # replace the placeholder <DOMAIN> string with the DOMAIN value from .env for https config
-sed -i 's/<DOMAIN>/'"$DOMAIN"'/g' compose/$1/mynginx/nginx-https/nginx.conf
+echo "Replacing placeholder domain for http config"
+sed -i 's/<DOMAIN>/'"$DOMAIN"'/g' $DIR_BASE/compose/$1/mynginx/nginx-https/nginx.conf
 
 # uncomment the domain server_name directive
-sed -i 's/^    # /    /g' compose/$1/mynginx/nginx-http/nginx.conf
+echo "Uncommenting http config server_name directive"
+sed -i 's/^    # /    /g' $DIR_BASE/compose/$1/mynginx/nginx-http/nginx.conf
+
+echo "Success!"
